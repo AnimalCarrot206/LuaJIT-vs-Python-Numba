@@ -4,7 +4,6 @@ import time
 import bisection
 import newthon
 import chords
-import simple_iterations
 import sympson_integral
 import monte_carlo_integral
 import linear_least_squares
@@ -14,7 +13,6 @@ ALGORITHMS_TO_TEST = {
     "Метод половинного деления": bisection.bisection_method,
     "Метол Ньютона-Рафсона": newthon.newton_method,
     "Метод хорд": chords.chord_method,
-    "Метод простой итерации": simple_iterations.iteration_method,
     "Метод Симпсона": sympson_integral.simpson_integral,
     "Метод Монте-Карло": monte_carlo_integral.monte_carlo_integral,
     "Метод наимеьших квадратов линейный": linear_least_squares.linear_least_squares,
@@ -32,7 +30,7 @@ ALGORITHMS_ARGUMENTS = {
         [AllFunctionsEquations.newthon_1, 1],
         [AllFunctionsEquations.newthon_2, 1],
         [AllFunctionsEquations.newthon_3, 0.5],
-        [AllFunctionsEquations.newthon_4, -0.1]
+        [AllFunctionsEquations.newthon_4, 0.001]
     ],
 
     "Метод хорд": [
@@ -40,13 +38,6 @@ ALGORITHMS_ARGUMENTS = {
         [AllFunctionsEquations.chords_2, 2, 3],
         [AllFunctionsEquations.chords_3, 1, 2],
         [AllFunctionsEquations.chords_4, 1, 2]
-    ],
-
-    "Метод простой итерации": [
-        [AllFunctionsEquations.simple_iterations_1, 5],
-        [AllFunctionsEquations.simple_iterations_2, 1.5],
-        [AllFunctionsEquations.simple_iterations_3, 0],
-        [AllFunctionsEquations.simple_iterations_4, -1],
     ],
 
     "Метод Симпсона": [
@@ -394,7 +385,6 @@ RESULT_FORMATTERS = {
     "Метод половинного деления": root_result_formatter,
     "Метол Ньютона-Рафсона": root_result_formatter,
     "Метод хорд": root_result_formatter,
-    "Метод простой итерации": root_result_formatter,
 
     "Метод Симпсона": root_result_formatter,
     "Метод Монте-Карло": root_result_formatter,
@@ -425,11 +415,19 @@ def get_string_for_output(algorithm_name: str, results, total_elapsed_time: floa
 
 
 def do_whole_test(is_output_enabled=False):
-    total_total_elapsed_time = 0
+    total_test_elapsed_time = 0
+    methods_time = {
+        "Метод половинного деления": 0,
+        "Метол Ньютона-Рафсона": 0,
+        "Метод хорд": 0,
+        "Метод Симпсона": 0,
+        "Метод Монте-Карло": 0,
+        "Метод наимеьших квадратов линейный": 0,
+    }
 
     for algorithmName, algorithmFunction in ALGORITHMS_TO_TEST.items():
         arguments_table = ALGORITHMS_ARGUMENTS[algorithmName]
-        total_elapsed_time = 0
+        total_algorithm_elapsed_time = 0
         results = []
 
         for argumentsList in arguments_table:
@@ -437,21 +435,38 @@ def do_whole_test(is_output_enabled=False):
             result = [algorithmFunction(*argumentsList)]
             elapsed_time = time.perf_counter() - start
 
-            total_elapsed_time = total_elapsed_time + elapsed_time
+            total_algorithm_elapsed_time = total_algorithm_elapsed_time + elapsed_time
             results.append([
                 result, elapsed_time
             ])
         if is_output_enabled:
-            print(get_string_for_output(algorithmName, results, total_elapsed_time))
+            print(get_string_for_output(algorithmName, results, total_algorithm_elapsed_time))
 
-        total_total_elapsed_time = total_total_elapsed_time + total_elapsed_time
+        methods_time[algorithmName] = total_algorithm_elapsed_time
+        total_test_elapsed_time = total_test_elapsed_time + total_algorithm_elapsed_time
 
-    return total_total_elapsed_time
+    return total_test_elapsed_time, methods_time
 
 
 tests_count = 100
 sum_of_time = 0
+total_of_methods = {
+    "Метод половинного деления": 0,
+    "Метол Ньютона-Рафсона": 0,
+    "Метод хорд": 0,
+    "Метод Симпсона": 0,
+    "Метод Монте-Карло": 0,
+    "Метод наимеьших квадратов линейный": 0,
+}
 for i in range(tests_count):
-    sum_of_time += do_whole_test(False)
+    test_time, methods = do_whole_test(False)
+    sum_of_time += test_time
+
+    for k, v in methods.items():
+        total_of_methods[k] += v
 
 print(str.format("Среднее время выполнение тестов -> %f" % (sum_of_time / tests_count)))
+print('=============================================================')
+for k, v in total_of_methods.items():
+    print(str.format("Среднее выполнения %s -> %f" % (k, v / tests_count)))
+print('=============================================================')

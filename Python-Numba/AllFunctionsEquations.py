@@ -75,28 +75,6 @@ def chords_4(x):
 # CHORDS ===========================================
 
 
-# SIMPLE ITERATIONS ===========================================
-@jit
-def simple_iterations_1(x):
-    return cos(x) + 0.1 * sin(5 * x)
-
-
-@jit
-def simple_iterations_2(x):
-    return (x + 1 / x) / 2 + 0.1 * sin(10 * x)
-
-
-@jit
-def simple_iterations_3(x):
-    return 0.99 * x + 0.01 * (x ** 3 - 2)
-
-
-@jit
-def simple_iterations_4(x):
-    return 2 * sin(x) + x / 3
-# SIMPLE ITERATIONS ===========================================
-
-
 # SIMPSON ===========================================
 @jit
 def simpson_1(x):

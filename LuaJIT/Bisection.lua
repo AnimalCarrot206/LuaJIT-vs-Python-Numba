@@ -22,7 +22,7 @@ return function (f, a, b, eps, maxIter)
         if b - a <= eps then
             break
         end
-        local c = (a + b) / 2
+        local c = (a + b) * 0.5
 
         if (f(a) > 0) ~= (f(c) > 0) then
             b = c

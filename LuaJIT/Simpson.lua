@@ -13,13 +13,8 @@ return function (f, a, b, n)
     local h = (b - a) / n
     local sum = f(a) + f(b)
 
-    for i = 1, n-1, 1 do
-        local x = a + i * h
-        if i % 2 == 1 then
-            sum = sum + 4 * f(x)
-        else
-            sum = sum + 2 * f(x)
-        end
+    for i = 1, n - 1 do
+        sum = sum + (2 + (i % 2 * 2)) * f(a + i * h)
     end
 
     return (h / 3) * sum

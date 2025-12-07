@@ -21,13 +21,13 @@ def newton_method(
         fx = func(x)
         fpx = derivative(func, x)
 
-        if abs_f(fpx) < epsilon:
+        if abs_f(fpx) <= epsilon:
             return inf
 
         x_new = x - fx / fpx
         
-        if abs_f(x_new - x) < epsilon or abs_f(fx) < epsilon:
-            break
+        if abs_f(x_new - x) <= epsilon:
+            return x_new
             
         x = x_new
     

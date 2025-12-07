@@ -11,9 +11,7 @@ def monte_carlo_integral(
         num_samples: int = 10**8
 ):
     summ = 0
-
     for i in range(num_samples):
-        x = a + (b - a) * random.random()
-        summ += func(x)
+        summ += func(a * random.random() * (b - 1))
 
     return (b - a) * summ / num_samples
