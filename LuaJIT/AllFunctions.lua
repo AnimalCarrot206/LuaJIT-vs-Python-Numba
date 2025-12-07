@@ -129,31 +129,29 @@ end
 -- MONTE-CARLO ===========================================
 
 do
-    local A, B = 3, 1
-    
     local function monte_carlo_1(x)
         return (x * x) + 3 * x + 1
     end
 
 
     local function monte_carlo_2(x)
-        return exp(-x)
+        return math.exp(-x)
     end
 
 
     local function monte_carlo_3(x)
-        return sin(x)
+        return math.sin(x)
     end
 
 
     local function monte_carlo_4(x)
-        return cos(x)
+        return math.cos(x)
     end
-
+    
     result.monte_carlo_1 = monte_carlo_1
-    result.monte_carlo_2 = monte_carlo_2
-    result.monte_carlo_3 = sin
-    result.monte_carlo_4 = cos
+    result.monte_carlo_2 = math.exp
+    result.monte_carlo_3 = math.sin
+    result.monte_carlo_4 = math.cos
 end
 -- MONTE-CARLO ===========================================
 

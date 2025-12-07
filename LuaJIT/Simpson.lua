@@ -13,7 +13,7 @@ return function (f, a, b, n)
     local h = (b - a) / n
     local sum = f(a) + f(b)
 
-    for i = 1, n - 1 do
+    for i = 1, n do
         sum = sum + (2 + (i % 2 * 2)) * f(a + i * h)
     end
 

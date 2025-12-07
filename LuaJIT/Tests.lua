@@ -6,47 +6,47 @@ local table = table
 local pi = math.pi
 
 local ALGORITHMS_TO_TEST = {
-    ["Метод половинного деления"] = require("Bisection"),
-    ["Метол Ньютона-Рафсона"] = require("Newton"),
-    ["Метод хорд"] = require("Chords"),
-    ["Метод Симпсона"] = require("Simpson"),
+    -- ["Метод половинного деления"] = require("Bisection"),
+    -- ["Метол Ньютона-Рафсона"] = require("Newton"),
+    -- ["Метод хорд"] = require("Chords"),
+    -- ["Метод Симпсона"] = require("Simpson"),
     ["Метод Монте-Карло"] = require("MonteCarloIntegral"),
 }
 
 local ALGORITHMS_ARGUMENTS = {
     ["Метод половинного деления"] = {
-        { AllFunctions.bisection_1, 2, 4},
-        { AllFunctions.bisection_2, 3.5, 4.5},
-        { AllFunctions.bisection_3, 1, 2},
-        { AllFunctions.bisection_4, 0, 1},
+        { AllFunctions.bisection_1, 2,   4 },
+        { AllFunctions.bisection_2, 3.5, 4.5 },
+        { AllFunctions.bisection_3, 1,   2 },
+        { AllFunctions.bisection_4, 0,   1 },
     },
 
     ["Метол Ньютона-Рафсона"] = {
-        { AllFunctions.newthon_1, 1},
-        { AllFunctions.newthon_2, 1},
-        { AllFunctions.newthon_3, 0.5},
-        { AllFunctions.newthon_4, 0.001},
+        { AllFunctions.newthon_1, 1 },
+        { AllFunctions.newthon_2, 1 },
+        { AllFunctions.newthon_3, 0.5 },
+        { AllFunctions.newthon_4, 0.001 },
     },
 
     ["Метод хорд"] = {
-        { AllFunctions.chords_1, 1, 3},
-        { AllFunctions.chords_2, 2, 3},
-        { AllFunctions.chords_3, 1, 2},
-        { AllFunctions.chords_4, 1, 2},
+        { AllFunctions.chords_1, 1, 3 },
+        { AllFunctions.chords_2, 2, 3 },
+        { AllFunctions.chords_3, 1, 2 },
+        { AllFunctions.chords_4, 1, 2 },
     },
 
     ["Метод Симпсона"] = {
-        { AllFunctions.simpson_1, 0, 2},
-        { AllFunctions.simpson_2, 0, 2},
-        { AllFunctions.simpson_3, 0, 2},
-        { AllFunctions.simpson_4, 0, 2},
+        { AllFunctions.simpson_1, 0, 2 },
+        { AllFunctions.simpson_2, 0, 2 },
+        { AllFunctions.simpson_3, 0, 2 },
+        { AllFunctions.simpson_4, 0, 2 },
     },
 
     ["Метод Монте-Карло"] = {
-        { AllFunctions.monte_carlo_1, 0, 2},
-        { AllFunctions.monte_carlo_2, 0, 1},
-        { AllFunctions.monte_carlo_3, 0, pi},
-        { AllFunctions.monte_carlo_4, 0, pi},
+        { AllFunctions.monte_carlo_1, 0, 2 },
+        { AllFunctions.monte_carlo_2, 0, 1 },
+        { AllFunctions.monte_carlo_3, 0, pi },
+        { AllFunctions.monte_carlo_4, 0, pi },
     },
 }
 
@@ -97,7 +97,7 @@ local function doWholeTest(isOutputEnabled)
 
         for _, argumentsList in ipairs(argumentsTable) do
             local start = os.clock()
-            local result = {algorithmFunction(unpack(argumentsList))}
+            local result = { algorithmFunction(unpack(argumentsList)) }
             local elsapsedTime = os.clock() - start
 
             totalAlgorithmElapsedTime = totalAlgorithmElapsedTime + elsapsedTime
@@ -118,7 +118,7 @@ local function doWholeTest(isOutputEnabled)
     return totalTestElapsedTime, totalOfMethodsTime
 end
 
-local ITERATIONS_COUNT = 100
+local ITERATIONS_COUNT = 10
 local timeSum = 0
 local totalOfMethods = {
     ["Метод половинного деления"] = 0,
@@ -127,13 +127,14 @@ local totalOfMethods = {
     ["Метод Симпсона"] = 0,
     ["Метод Монте-Карло"] = 0,
 }
-
-for i = 1, ITERATIONS_COUNT, 1 do
-    local time, methods = doWholeTest(false)
-    timeSum = timeSum + time
-
-    for name, value in pairs(methods) do
-        totalOfMethods[name] = totalOfMethods[name] + value
+-- Первый прогон, по аналогии с Python - прогрев (хоть и не требуюется)
+for i = 1, ITERATIONS_COUNT + 1, 1 do
+    local time, methods = doWholeTest(i ~= 1)
+    if i ~= 1 then
+        timeSum = timeSum + time
+        for name, value in pairs(methods) do
+            totalOfMethods[name] = totalOfMethods[name] + value
+        end
     end
 end
 

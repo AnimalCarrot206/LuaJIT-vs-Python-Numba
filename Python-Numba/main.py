@@ -448,7 +448,7 @@ def do_whole_test(is_output_enabled=False):
     return total_test_elapsed_time, methods_time
 
 
-tests_count = 100
+tests_count = 1
 sum_of_time = 0
 total_of_methods = {
     "Метод половинного деления": 0,
@@ -458,9 +458,12 @@ total_of_methods = {
     "Метод Монте-Карло": 0,
     "Метод наимеьших квадратов линейный": 0,
 }
-for i in range(tests_count):
-    test_time, methods = do_whole_test(False)
-    sum_of_time += test_time
+# Первый проход - прогрев Numba
+for i in range(tests_count + 1):
+    test_time, methods = do_whole_test(i != 0)
+    if i == 0:
+        continue
+    sum_of_time = sum_of_time + test_time
 
     for k, v in methods.items():
         total_of_methods[k] += v
